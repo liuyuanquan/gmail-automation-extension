@@ -28,8 +28,8 @@ export default defineConfig({
 			output: {
 				format: "iife",
 				name: "GmailAutomation",
-				entryFileNames: "[name].js",
-				chunkFileNames: "[name].js",
+				entryFileNames: "js/[name].js",
+				chunkFileNames: "js/[name].js",
 				assetFileNames: "[name].[ext]",
 			},
 		},

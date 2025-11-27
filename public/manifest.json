@@ -14,7 +14,7 @@
 	"content_scripts": [
 		{
 			"matches": ["https://mail.google.com/*"],
-			"js": ["xlsx.full.min.js", "dist/content.js"]
+			"js": ["js/xlsx.full.min.js", "js/content.js"]
 		}
 	],
 	"action": {
