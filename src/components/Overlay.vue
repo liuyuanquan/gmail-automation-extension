@@ -1,23 +1,23 @@
 <template>
 	<el-dialog
-		v-model="isVisible"
+		v-model="isDialogVisible"
 		title="Gmail 批量发送"
 		width="360px"
 		:close-on-click-modal="true"
 		:close-on-press-escape="true"
-		@close="close"
+		@close="isDialogVisible = false"
 	>
 		<el-form label-width="100px">
 			<!-- 模板选择 -->
 			<el-form-item label="邮件模板:">
 				<el-select
-					v-model="selectedTemplate"
+					v-model="template"
 					placeholder="选择模板"
 					style="width: 100%"
 					@change="handleTemplateChange"
 				>
 					<el-option
-						v-for="option in templateOptions"
+						v-for="option in TEMPLATE_OPTIONS"
 						:key="option.value"
 						:label="option.label"
 						:value="option.value"
@@ -31,7 +31,7 @@
 					:auto-upload="false"
 					:show-file-list="false"
 					accept=".xlsx, .xls"
-					:on-change="handleExcelImport"
+					:on-change="handleExcelChange"
 				>
 					<el-button type="primary">选择文件</el-button>
 				</el-upload>
@@ -56,42 +56,23 @@
 </template>
 
 <script setup>
-import { watch } from "vue";
-import { useDialog } from "../composables/useDialog";
+import { storeToRefs } from "pinia";
+import { useUIStore } from "../stores/uiStore";
 import { useEmailStore } from "../stores/emailStore";
 import { useEmailActions } from "../composables/useEmailActions";
-import { useExcel } from "../composables/useExcel";
 import { TEMPLATE_OPTIONS } from "../constants/templates";
 
-// Dialog 相关
-const { isVisible, close } = useDialog();
+// Dialog
+const uiStore = useUIStore();
+const { isDialogVisible } = storeToRefs(uiStore);
 
 // Store
 const emailStore = useEmailStore();
-const { selectedTemplateForInput, handleTemplateChange, loadTemplate } =
-	emailStore;
-const selectedTemplate = selectedTemplateForInput;
-
-// Dialog 显示时自动加载选中的模板
-watch(
-	isVisible,
-	(visible) => {
-		if (visible && emailStore.selectedTemplate) {
-			loadTemplate(emailStore.selectedTemplate);
-		}
-	},
-	{ immediate: true }
-);
-
-// Excel 导入
-const { handleExcelImport } = useExcel();
+const { template, handleTemplateChange, handleExcelChange } = emailStore;
 
 // 邮件操作
 const { canSend, isSending, sendButtonText, handleSend, handleStop } =
 	useEmailActions();
-
-// 模板选项
-const templateOptions = TEMPLATE_OPTIONS;
 </script>
 
 <style scoped>

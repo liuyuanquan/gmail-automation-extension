@@ -30,7 +30,7 @@ const { isDragging, handleDragStart } = useDraggable(position, ({ dragDuration, 
 
 	// 判断是否为点击，如果是则切换 Dialog
 	if (isClick(dragDuration, dragDistance)) {
-		uiStore.toggleDialog();
+		uiStore.isDialogVisible = !uiStore.isDialogVisible;
 	}
 });
 

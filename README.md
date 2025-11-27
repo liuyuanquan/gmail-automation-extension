@@ -23,16 +23,14 @@ gmail-automation-extension/
 │   │   ├── useDialog.js          # Dialog 显示/隐藏逻辑
 │   │   ├── useDraggable.js       # 拖拽功能逻辑
 │   │   ├── useEmailActions.js    # 邮件发送操作逻辑
-│   │   ├── useEmailForm.js       # 邮件表单逻辑
-│   │   ├── useExcel.js           # Excel 处理逻辑
-│   │   ├── usePosition.js        # 位置管理逻辑
-│   │   └── useTemplate.js        # 模板相关逻辑
+│   │   └── usePosition.js        # 位置管理逻辑
 │   ├── constants/
 │   │   └── templates.js          # 模板选项常量
 │   ├── stores/
 │   │   ├── emailStore.js         # 邮件业务状态管理
 │   │   └── uiStore.js            # UI 状态管理
 │   ├── utils/
+│   │   ├── excel.js              # Excel 解析工具函数
 │   │   ├── gmail.js              # Gmail 工具函数
 │   │   └── template.js           # 模板工具函数
 │   ├── assets/
@@ -130,10 +128,7 @@ npm run build
 - `useDialog()` - Dialog 显示/隐藏逻辑，自动打开撰写视图
 - `useDraggable()` - 可拖拽功能逻辑
 - `useEmailActions()` - 邮件发送操作相关逻辑
-- `useEmailForm()` - 邮件表单状态和逻辑
-- `useExcel()` - Excel 文件处理逻辑
 - `usePosition()` - 位置管理和持久化逻辑
-- `useTemplate()` - 模板加载相关逻辑
 
 ### 组件
 

@@ -1,29 +1,23 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { openWriteEmail } from "../utils";
 
 export const useUIStore = defineStore("ui", () => {
 	// UI 状态
 	const isDialogVisible = ref(false);
 
-	// Actions
-	function toggleDialog() {
-		isDialogVisible.value = !isDialogVisible.value;
-	}
-
-	function showDialog() {
-		isDialogVisible.value = true;
-	}
-
-	function hideDialog() {
-		isDialogVisible.value = false;
-	}
+	// 监听 Dialog 显示状态，显示时打开撰写视图
+	watch(
+		() => isDialogVisible.value,
+		async (visible) => {
+			if (visible) {
+				await openWriteEmail();
+			}
+		}
+	);
 
 	return {
 		// State
 		isDialogVisible,
-		// Actions
-		toggleDialog,
-		showDialog,
-		hideDialog,
 	};
 });
