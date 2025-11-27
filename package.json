@@ -9,9 +9,8 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
-		"@vueuse/components": "^14.0.0",
-		"@vueuse/core": "^14.0.0",
 		"element-plus": "^2.8.0",
+		"interactjs": "^1.10.27",
 		"pinia": "^2.1.7",
 		"vue": "^3.4.21"
 	},

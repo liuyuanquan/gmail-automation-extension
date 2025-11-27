@@ -1,5 +1,3 @@
-import { defineStore } from "pinia";
-import { ref, watch } from "vue";
 import { openWriteEmail } from "../utils";
 
 export const useUIStore = defineStore("ui", () => {

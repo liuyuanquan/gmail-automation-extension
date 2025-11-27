@@ -1,6 +1,3 @@
-import { computed } from "vue";
-import { useEmailStore } from "../stores/emailStore";
-
 /**
  * 邮件操作相关的 composable
  */

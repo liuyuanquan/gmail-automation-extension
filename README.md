@@ -20,19 +20,15 @@ gmail-automation-extension/
 │   │   ├── Overlay.vue          # Dialog 覆盖层组件
 │   │   └── FloatingButton.vue   # 浮动按钮组件
 │   ├── composables/
-│   │   ├── useDialog.js          # Dialog 显示/隐藏逻辑
-│   │   ├── useDraggable.js       # 拖拽功能逻辑
-│   │   ├── useEmailActions.js    # 邮件发送操作逻辑
-│   │   └── usePosition.js        # 位置管理逻辑
+│   │   ├── useDraggable.js       # 拖拽功能逻辑（使用 interact.js，支持边缘回弹和位置持久化）
+│   │   └── useEmailActions.js    # 邮件发送操作逻辑
 │   ├── constants/
 │   │   └── templates.js          # 模板选项常量
 │   ├── stores/
 │   │   ├── emailStore.js         # 邮件业务状态管理
 │   │   └── uiStore.js            # UI 状态管理
 │   ├── utils/
-│   │   ├── excel.js              # Excel 解析工具函数
-│   │   ├── gmail.js              # Gmail 工具函数
-│   │   └── template.js           # 模板工具函数
+│   │   └── index.js              # 工具函数（Gmail、Excel、模板）
 │   ├── assets/
 │   │   └── main.css              # 全局样式
 │   ├── App.vue                   # 根组件
@@ -125,10 +121,8 @@ npm run build
 
 ### Composables
 
-- `useDialog()` - Dialog 显示/隐藏逻辑，自动打开撰写视图
-- `useDraggable()` - 可拖拽功能逻辑
+- `useDraggable()` - 可拖拽功能逻辑（使用 interact.js，支持边缘回弹和位置持久化）
 - `useEmailActions()` - 邮件发送操作相关逻辑
-- `usePosition()` - 位置管理和持久化逻辑
 
 ### 组件
 

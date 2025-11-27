@@ -3,7 +3,7 @@
 		v-model="isDialogVisible"
 		title="Gmail 批量发送"
 		width="360px"
-		:close-on-click-modal="true"
+		:close-on-click-modal="false"
 		:close-on-press-escape="true"
 		@close="isDialogVisible = false"
 	>
@@ -37,7 +37,6 @@
 				</el-upload>
 			</el-form-item>
 		</el-form>
-		<!-- 按钮组 -->
 		<template #footer>
 			<div class="button-group">
 				<el-button
@@ -56,9 +55,6 @@
 </template>
 
 <script setup>
-import { storeToRefs } from "pinia";
-import { useUIStore } from "../stores/uiStore";
-import { useEmailStore } from "../stores/emailStore";
 import { useEmailActions } from "../composables/useEmailActions";
 import { TEMPLATE_OPTIONS } from "../constants/templates";
 

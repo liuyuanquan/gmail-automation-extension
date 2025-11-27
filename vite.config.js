@@ -9,7 +9,16 @@ export default defineConfig({
 	plugins: [
 		vue(),
 		AutoImport({
+			imports: [
+				"vue", // 自动导入 Vue API（ref, computed, watch, onMounted 等）
+				"pinia", // 自动导入 Pinia API（defineStore, storeToRefs 等）
+				{
+					"@/stores/emailStore": ["useEmailStore"],
+					"@/stores/uiStore": ["useUIStore"],
+				},
+			],
 			resolvers: [ElementPlusResolver()],
+			dts: false, // 不生成类型声明文件（JS 项目）
 		}),
 		Components({
 			resolvers: [

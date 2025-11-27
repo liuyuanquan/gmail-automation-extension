@@ -1,9 +1,7 @@
 .el-dialog {
   position: fixed;
 	left: 50px;
-	bottom: 50px;
-	top: auto;
-	right: auto;
+	top: 50px;
 	margin: 0;
 	transform: none;
 }

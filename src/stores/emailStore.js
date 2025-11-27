@@ -1,8 +1,5 @@
-import { defineStore } from "pinia";
-import { ref, computed } from "vue";
 import {
 	openWriteEmail,
-	isWriteEmailOpen,
 	sendEmail,
 	parseExcel,
 	replaceTemplatePlaceholders,
