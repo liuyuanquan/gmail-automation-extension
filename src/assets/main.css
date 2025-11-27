@@ -1,14 +1,13 @@
-/* Element Plus 样式 */
-@import "element-plus/dist/index.css";
-
-/* Dialog 按钮组样式 */
-:deep(.el-dialog__footer) .button-group {
-	display: flex;
-	justify-content: center;
-	gap: 16px;
+.el-dialog {
+  position: fixed;
+	left: 50px;
+	bottom: 50px;
+	top: auto;
+	right: auto;
+	margin: 0;
+	transform: none;
 }
 
-:deep(.el-dialog__footer) .button-group .el-button {
-	flex: 1;
-	max-width: 200px;
+.el-dialog__footer {
+	padding-top: 0;
 }

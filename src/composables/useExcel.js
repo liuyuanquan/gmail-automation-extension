@@ -1,12 +1,10 @@
 import { useEmailStore } from "../stores/emailStore";
-import { useTemplate } from "./useTemplate";
 
 /**
  * Excel 处理相关的 composable
  */
 export function useExcel() {
 	const emailStore = useEmailStore();
-	const { checkAndAutoFill } = useTemplate();
 
 	/**
 	 * 处理 Excel 文件导入
@@ -87,7 +85,7 @@ export function useExcel() {
 				console.log(`共提取 ${emails.length} 个邮箱地址`, recipients);
 
 				// 检查是否可以自动填充
-				checkAndAutoFill();
+				emailStore.checkAndAutoFill();
 			} catch (error) {
 				console.error("Error processing Excel file:", error);
 				emailStore.setExcelRecipients(null);

@@ -16,9 +16,9 @@ export function useEmailActions() {
 	// 发送按钮文本
 	const sendButtonText = computed(() => {
 		if (isSending.value) {
-			return `🚀 发送中 (${currentSendIndex.value}/${totalCount.value})`;
+			return `发送中 (${currentSendIndex.value}/${totalCount.value})`;
 		}
-		return "🚀 开始发送";
+		return "开始发送";
 	});
 
 	// 操作方法

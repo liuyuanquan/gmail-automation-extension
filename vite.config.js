@@ -12,7 +12,11 @@ export default defineConfig({
 			resolvers: [ElementPlusResolver()],
 		}),
 		Components({
-			resolvers: [ElementPlusResolver()],
+			resolvers: [
+				ElementPlusResolver({
+					importStyle: "css", // 按需导入 CSS 样式
+				}),
+			],
 		}),
 	],
 	css: {

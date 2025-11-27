@@ -7,10 +7,15 @@ import {
 	sendEmail,
 } from "../utils/gmail";
 import { replaceTemplatePlaceholders } from "../utils/template";
+import { TEMPLATE_OPTIONS } from "../constants/templates";
 
 export const useEmailStore = defineStore("email", () => {
-	// 状态
-	const selectedTemplate = ref(null);
+	// 状态 - 默认选中第一个模板
+	const selectedTemplate = ref(
+		TEMPLATE_OPTIONS.length > 0 ? TEMPLATE_OPTIONS[0].value : null
+	);
+	// 当前选中的模板配置（包含 JSON 数据）
+	const selectedTemplateConfig = ref(null);
 	const excelData = ref(null);
 	const excelRecipients = ref(null);
 	const template = ref(null); // { subject: string, body: string }
@@ -30,6 +35,78 @@ export const useEmailStore = defineStore("email", () => {
 	function setSelectedTemplate(name) {
 		selectedTemplate.value = name;
 	}
+
+	/**
+	 * 加载邮件模板内容
+	 * 所有数据（JSON 和 HTML）都从 TEMPLATE_OPTIONS 中获取，无需异步加载
+	 * @param {string} templateName - 模板名称（不包含扩展名）
+	 */
+	function loadTemplate(templateName) {
+		try {
+			setSelectedTemplate(templateName);
+
+			// 从 TEMPLATE_OPTIONS 中查找对应的模板配置
+			const templateOption = TEMPLATE_OPTIONS.find(
+				(opt) => opt.value === templateName
+			);
+
+			if (!templateOption || !templateOption.extra) {
+				throw new Error(
+					`Template ${templateName} not found in TEMPLATE_OPTIONS`
+				);
+			}
+
+			selectedTemplateConfig.value = templateOption;
+
+			// 直接从配置中获取所有数据
+			setTemplate({
+				subject: templateOption.extra.subject,
+				body: templateOption.extra.body,
+			});
+
+			console.log("Template loaded:", templateName);
+
+			// 检查是否可以自动填充
+			checkAndAutoFill();
+		} catch (error) {
+			console.error("Error loading template:", error);
+			setTemplate(null);
+		}
+	}
+
+	/**
+	 * 检查数据是否准备好，如果准备好则自动填充第一条数据
+	 */
+	function checkAndAutoFill() {
+		const hasTemplate = !!(template.value?.subject && template.value?.body);
+		const hasExcelData = !!(excelData.value?.length > 0);
+
+		if (hasTemplate && hasExcelData) {
+			console.log("模板和 Excel 数据都已加载完成，自动填充第一条数据");
+			triggerComposeAndFill();
+		}
+	}
+
+	/**
+	 * 处理模板选择变化
+	 */
+	function handleTemplateChange(value) {
+		if (value) {
+			loadTemplate(value);
+		} else {
+			setSelectedTemplate(null);
+		}
+	}
+
+	/**
+	 * 用于 v-model 双向绑定的 computed 属性（将空字符串转换为 null）
+	 */
+	const selectedTemplateForInput = computed({
+		get: () => selectedTemplate.value || "",
+		set: (value) => {
+			setSelectedTemplate(value || null);
+		},
+	});
 
 	function setExcelData(data) {
 		excelData.value = data;
@@ -179,6 +256,7 @@ export const useEmailStore = defineStore("email", () => {
 	return {
 		// State
 		selectedTemplate,
+		selectedTemplateConfig,
 		excelData,
 		excelRecipients,
 		template,
@@ -187,8 +265,12 @@ export const useEmailStore = defineStore("email", () => {
 		// Computed
 		canSend,
 		totalCount,
+		selectedTemplateForInput,
 		// Actions
 		setSelectedTemplate,
+		handleTemplateChange,
+		loadTemplate,
+		checkAndAutoFill,
 		setExcelData,
 		setExcelRecipients,
 		setTemplate,
