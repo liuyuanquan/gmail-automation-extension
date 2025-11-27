@@ -13,8 +13,12 @@ export default defineConfig({
 				"vue", // 自动导入 Vue API（ref, computed, watch, onMounted 等）
 				"pinia", // 自动导入 Pinia API（defineStore, storeToRefs 等）
 				{
-					"@/stores/emailStore": ["useEmailStore"],
-					"@/stores/uiStore": ["useUIStore"],
+					"@/stores/gmailStore": ["useGmailStore"],
+					"@element-plus/icons-vue": [
+						"Delete",
+						"Loading",
+						// 可以在这里添加更多需要自动导入的图标
+					],
 				},
 			],
 			resolvers: [ElementPlusResolver()],

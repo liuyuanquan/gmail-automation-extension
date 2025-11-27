@@ -1,6 +1,6 @@
 .el-dialog {
-  position: fixed;
-	left: 50px;
+	position: fixed;
+	right: 50px;
 	top: 50px;
 	margin: 0;
 	transform: none;
@@ -8,4 +8,24 @@
 
 .el-dialog__footer {
 	padding-top: 0;
+}
+
+.upload-mask {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.el-loading-spinner {
+	margin-top: 0;
+	position: initial;
+	top: initial;
+}
+
+.el-loading-spinner .path {
+	stroke: #fff !important;
+}
+
+.el-loading-spinner .el-loading-text {
+	color: #fff !important;
 }

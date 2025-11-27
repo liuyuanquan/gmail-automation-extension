@@ -2,13 +2,13 @@
  * 邮件操作相关的 composable
  */
 export function useEmailActions() {
-	const emailStore = useEmailStore();
+	const gmailStore = useGmailStore();
 
 	// 计算属性
-	const canSend = computed(() => emailStore.canSend);
-	const isSending = computed(() => emailStore.isSending);
-	const currentSendIndex = computed(() => emailStore.currentSendIndex);
-	const totalCount = computed(() => emailStore.totalCount);
+	const canSend = computed(() => gmailStore.canSend);
+	const isSending = computed(() => gmailStore.isSending);
+	const currentSendIndex = computed(() => gmailStore.currentSendIndex);
+	const totalCount = computed(() => gmailStore.totalCount);
 
 	// 发送按钮文本
 	const sendButtonText = computed(() => {
@@ -20,17 +20,16 @@ export function useEmailActions() {
 
 	// 操作方法
 	const handleSend = () => {
-		emailStore.startBatchSend();
+		gmailStore.startBatchSend();
 	};
 
 	const handleStop = () => {
-		emailStore.stopSending();
+		gmailStore.stopSending();
 	};
 
 	return {
 		canSend,
 		isSending,
-		currentSendIndex,
 		totalCount,
 		sendButtonText,
 		handleSend,

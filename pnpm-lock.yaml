@@ -8,12 +8,9 @@ importers:
 
   .:
     dependencies:
-      '@vueuse/components':
-        specifier: ^14.0.0
-        version: 14.1.0(vue@3.5.25)
-      '@vueuse/core':
-        specifier: ^14.0.0
-        version: 14.1.0(vue@3.5.25)
+      '@element-plus/icons-vue':
+        specifier: ^2.3.2
+        version: 2.3.2(vue@3.5.25)
       element-plus:
         specifier: ^2.8.0
         version: 2.11.8(vue@3.5.25)
@@ -420,11 +417,6 @@ packages:
 
   '@vue/shared@3.5.25':
     resolution: {integrity: sha512-AbOPdQQnAnzs58H2FrrDxYj/TJfmeS2jdfEEhgiKINy+bnOANmVizIEgq1r+C5zsbs6l1CCQxtcj71rwNQ4jWg==}
-
-  '@vueuse/components@14.1.0':
-    resolution: {integrity: sha512-SDRJUAv3H7/PMh+KkYpq0d5KMzpKOfqx4qcV4xyN4mZOLPw8NkiWu+yDcfXwI8h1uCqhRNz2cdeaLa+IuaehFw==}
-    peerDependencies:
-      vue: ^3.5.0
 
   '@vueuse/core@14.1.0':
     resolution: {integrity: sha512-rgBinKs07hAYyPF834mDTigH7BtPqvZ3Pryuzt1SD/lg5wEcWqvwzXXYGEDb2/cP0Sj5zSvHl3WkmMELr5kfWw==}
@@ -1055,7 +1047,8 @@ snapshots:
 
   '@types/web-bluetooth@0.0.16': {}
 
-  '@types/web-bluetooth@0.0.21': {}
+  '@types/web-bluetooth@0.0.21':
+    optional: true
 
   '@vitejs/plugin-vue@5.2.4(vite@5.4.21)(vue@3.5.25)':
     dependencies:
@@ -1118,18 +1111,13 @@ snapshots:
 
   '@vue/shared@3.5.25': {}
 
-  '@vueuse/components@14.1.0(vue@3.5.25)':
-    dependencies:
-      '@vueuse/core': 14.1.0(vue@3.5.25)
-      '@vueuse/shared': 14.1.0(vue@3.5.25)
-      vue: 3.5.25
-
   '@vueuse/core@14.1.0(vue@3.5.25)':
     dependencies:
       '@types/web-bluetooth': 0.0.21
       '@vueuse/metadata': 14.1.0
       '@vueuse/shared': 14.1.0(vue@3.5.25)
       vue: 3.5.25
+    optional: true
 
   '@vueuse/core@9.13.0(vue@3.5.25)':
     dependencies:
@@ -1141,13 +1129,15 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
-  '@vueuse/metadata@14.1.0': {}
+  '@vueuse/metadata@14.1.0':
+    optional: true
 
   '@vueuse/metadata@9.13.0': {}
 
   '@vueuse/shared@14.1.0(vue@3.5.25)':
     dependencies:
       vue: 3.5.25
+    optional: true
 
   '@vueuse/shared@9.13.0(vue@3.5.25)':
     dependencies:
