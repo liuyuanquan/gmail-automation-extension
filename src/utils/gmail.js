@@ -3,6 +3,7 @@ import { ElMessage } from "element-plus";
 import { GMAIL_SELECTORS } from "../constants";
 import { waitForElement, waitForElementRemoved } from "./dom";
 import { replaceTemplatePlaceholders } from "./template";
+import { getAttachmentGitHubUrl } from "./templateLoader";
 
 /**
  * 获取 Gmail 撰写视图的字段元素
@@ -126,17 +127,17 @@ export async function setAttachmentsField(attachments) {
 	clearAttachments();
 
 	try {
-		// 获取扩展的 base URL
-		const extensionId = chrome.runtime.id;
-		const baseUrl = `chrome-extension://${extensionId}`;
-
-		// 创建 File 对象数组
+		// 创建 File 对象数组（附件始终从 GitHub 加载）
 		const files = await Promise.all(
 			attachments.map(async (attachment) => {
-				// 构建文件的完整 URL
-				const fileUrl = `${baseUrl}${attachment.path}`;
+				// 从 GitHub 加载附件（路径相对于 templates 目录）
+				const fileUrl = getAttachmentGitHubUrl(attachment.path);
+
 				// 获取文件内容
 				const response = await fetch(fileUrl);
+				if (!response.ok) {
+					throw new Error(`Failed to load attachment: ${response.statusText}`);
+				}
 				const blob = await response.blob();
 				// 创建 File 对象
 				return new File([blob], attachment.name, { type: blob.type });
