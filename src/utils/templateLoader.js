@@ -86,6 +86,15 @@ export async function loadTemplates() {
 }
 
 /**
+ * 构建附件的 GitHub Raw URL
+ * @param {string} filePath - 附件文件路径（相对于 templates 目录）
+ * @returns {string} GitHub Raw URL
+ */
+export function getAttachmentGitHubUrl(filePath) {
+	return getGitHubRawUrl(filePath);
+}
+
+/**
  * 获取 GitHub 配置（用于调试）
  */
 export function getGitHubConfig() {
