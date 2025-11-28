@@ -17,6 +17,7 @@ import {
 	replaceTemplatePlaceholders,
 } from "../utils";
 import { TEMPLATE_OPTIONS } from "../constants";
+import { loadTemplates } from "../utils/templateLoader";
 
 export const useGmailStore = defineStore("gmail", () => {
 	// ==================== Dialog ====================
@@ -50,16 +51,28 @@ export const useGmailStore = defineStore("gmail", () => {
 
 	// ==================== Template ====================
 	// 当前选择的邮件模板名称
-	const template = ref(
-		TEMPLATE_OPTIONS.length > 0 ? TEMPLATE_OPTIONS[0].value : null
-	);
+	const template = ref(null);
+
+	// 初始化加载模板
+	(async () => {
+		try {
+			const templates = await loadTemplates();
+			TEMPLATE_OPTIONS.value = templates;
+			// 如果有模板，默认选择第一个
+			if (templates.length > 0) {
+				template.value = templates[0].value;
+			}
+		} catch (error) {
+			console.error("初始化模板失败:", error);
+		}
+	})();
 
 	// 根据 template 从 TEMPLATE_OPTIONS 中获取对应的 extra 配置
 	const templateConfig = computed(() => {
 		if (!template.value) {
 			return null;
 		}
-		const templateOption = TEMPLATE_OPTIONS.find(
+		const templateOption = TEMPLATE_OPTIONS.value.find(
 			(opt) => opt.value === template.value
 		);
 		return templateOption?.extra || null;

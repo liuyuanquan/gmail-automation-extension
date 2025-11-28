@@ -38,7 +38,7 @@
 						@change="handleTemplateChange"
 					>
 						<el-option
-							v-for="option in TEMPLATE_OPTIONS"
+							v-for="option in templateOptions"
 							:key="option.value"
 							:label="option.label"
 							:value="option.value"
@@ -107,6 +107,8 @@
 <script setup>
 import { Delete } from "@element-plus/icons-vue";
 import { TEMPLATE_OPTIONS } from "../constants";
+import { useGmailStore } from "../stores/gmailStore";
+import { storeToRefs } from "pinia";
 
 // Store
 const gmailStore = useGmailStore();
@@ -123,6 +125,9 @@ const {
 } = storeToRefs(gmailStore);
 const { handleTemplateChange, handleExcelChange, startBatchSend, stopSending } =
 	gmailStore;
+
+// 将 TEMPLATE_OPTIONS 转换为计算属性以便响应式更新
+const templateOptions = computed(() => TEMPLATE_OPTIONS.value);
 </script>
 
 <style scoped>
