@@ -39,4 +39,5 @@ export const GMAIL_SELECTORS = {
 /**
  * 邮件模板选项（从 GitHub 动态加载）
  */
+import { ref } from "vue";
 export const TEMPLATE_OPTIONS = ref([]);

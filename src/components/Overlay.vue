@@ -105,6 +105,7 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { Delete } from "@element-plus/icons-vue";
 import { TEMPLATE_OPTIONS } from "../constants";
 import { useGmailStore } from "../stores/gmailStore";
