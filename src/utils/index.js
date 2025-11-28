@@ -38,3 +38,6 @@ export { formatCurrentTime } from "./time";
 
 // 延迟工具函数
 export { getFailureDelay } from "./delay";
+
+// 模板加载器
+export { loadTemplates, getGitHubConfig } from "./templateLoader";

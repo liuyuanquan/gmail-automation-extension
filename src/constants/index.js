@@ -1,6 +1,3 @@
-import template15Html from "../assets/template15.html?raw";
-import template16Html from "../assets/template16.html?raw";
-
 /**
  * Gmail 页面元素选择器常量
  * 统一管理所有 Gmail DOM 选择器，方便维护和更新
@@ -40,31 +37,6 @@ export const GMAIL_SELECTORS = {
 };
 
 /**
- * 邮件模板选项
+ * 邮件模板选项（从 GitHub 动态加载）
  */
-export const TEMPLATE_OPTIONS = [
-	{
-		label: "模板15",
-		value: "template15",
-		extra: {
-			subject:
-				"Revolutionize Your Laboratory Research with Our Joule Heating Devices",
-			attachments: [
-				{
-					path: "/plugin/Hydronova-Product Manual.pdf",
-					name: "Hydronova-Product Manual.pdf",
-				},
-			],
-			body: template15Html,
-		},
-	},
-	{
-		label: "模板16",
-		value: "template16",
-		extra: {
-			subject: "Research Cloud - Live Talk Invitation",
-			attachments: [],
-			body: template16Html,
-		},
-	},
-];
+export const TEMPLATE_OPTIONS = ref([]);
