@@ -1,6 +1,15 @@
 {
 	"templates": [
 		{
+			"label": "模板14",
+			"value": "template14",
+			"htmlFile": "template14.html",
+			"extra": {
+				"subject": "Test Template 14 - Sample Email",
+				"attachments": []
+			}
+		},
+		{
 			"label": "模板15",
 			"value": "template15",
 			"htmlFile": "template15.html",
