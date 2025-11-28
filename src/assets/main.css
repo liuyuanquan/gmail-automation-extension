@@ -1,9 +1,9 @@
 .el-dialog {
 	position: fixed;
 	right: 50px;
-	top: 50px;
+	top: 50%;
+	transform: translateY(-50%);
 	margin: 0;
-	transform: none;
 }
 
 .el-dialog__footer {

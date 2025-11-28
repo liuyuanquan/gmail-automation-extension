@@ -2,7 +2,7 @@
 	<el-dialog
 		v-model="isDialogVisible"
 		title="Gmail 批量发送"
-		width="640px"
+		width="480px"
 		:close-on-click-modal="false"
 		:close-on-press-escape="true"
 		@close="isDialogVisible = false"
@@ -10,6 +10,7 @@
 	>
 		<!-- 附件上传遮罩层 -->
 		<div
+			v-if="isUploading"
 			v-loading="isUploading"
 			element-loading-text="附件正在上传中..."
 			element-loading-custom-class="upload-mask"
@@ -46,6 +47,7 @@
 					<el-button
 						v-if="template"
 						link
+						type="danger"
 						:icon="Delete"
 						@click="handleTemplateChange(null)"
 					>
@@ -67,6 +69,7 @@
 					<el-button
 						v-if="excelFileName"
 						link
+						type="danger"
 						:icon="Delete"
 						@click="handleExcelChange(null)"
 					>
@@ -77,17 +80,23 @@
 					<span v-if="totalCount > 0"> ，总共 {{ totalCount }} 位邮箱 </span>
 				</div>
 			</el-form-item>
+
+			<!-- 附件信息 -->
+			<el-form-item v-if="attachmentInfo" label="附件:">
+				<div>
+					<span style="color: #409eff">📎 {{ attachmentInfo }}</span>
+					<span style="color: #909399; margin-left: 8px"
+						>（将在发送时加载）</span
+					>
+				</div>
+			</el-form-item>
 		</el-form>
 		<template #footer>
 			<div class="button-group">
-				<el-button
-					type="primary"
-					:disabled="!canSend || isSending"
-					@click="handleSend"
-				>
+				<el-button type="primary" :disabled="!canSend" @click="startBatchSend">
 					{{ sendButtonText }}
 				</el-button>
-				<el-button type="danger" :disabled="!isSending" @click="handleStop">
+				<el-button type="danger" :disabled="!isSending" @click="stopSending">
 					停止发送
 				</el-button>
 			</div>
@@ -96,36 +105,24 @@
 </template>
 
 <script setup>
-import { Loading } from "@element-plus/icons-vue";
-import { useEmailActions } from "../composables/useEmailActions";
-import { TEMPLATE_OPTIONS } from "../constants/templates";
+import { Delete } from "@element-plus/icons-vue";
+import { TEMPLATE_OPTIONS } from "../constants";
 
 // Store
 const gmailStore = useGmailStore();
-const { template, excelFileName, totalCount, isUploading, isDialogVisible } =
-	storeToRefs(gmailStore);
 const {
-	handleTemplateChange,
-	handleExcelChange,
-	watchUploadProgress,
-	stopWatchUploadProgress,
-} = gmailStore;
-
-// 邮件操作
-const { canSend, isSending, sendButtonText, handleSend, handleStop } =
-	useEmailActions();
-
-// 当 dialog 打开时开始监听
-watch(
-	() => isDialogVisible.value,
-	(visible) => {
-		if (visible) {
-			watchUploadProgress();
-		} else {
-			stopWatchUploadProgress();
-		}
-	}
-);
+	template,
+	attachmentInfo,
+	excelFileName,
+	totalCount,
+	isUploading,
+	isDialogVisible,
+	canSend,
+	isSending,
+	sendButtonText,
+} = storeToRefs(gmailStore);
+const { handleTemplateChange, handleExcelChange, startBatchSend, stopSending } =
+	gmailStore;
 </script>
 
 <style scoped>
@@ -144,11 +141,6 @@ watch(
 	display: flex;
 	align-items: center;
 	gap: 8px;
-}
-
-.file-info {
-	margin-top: 4px;
-	font-size: 12px;
 }
 
 .overlay-dialog {

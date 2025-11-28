@@ -1,0 +1,10 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 邮件主体轮廓（蓝色，契合Gmail品牌） -->
+  <path d="M21.333 32H106.667C115.543 32 122.667 39.123 122.667 48V80C122.667 88.877 115.543 96 106.667 96H21.333C12.457 96 5.333 88.877 5.333 80V48C5.333 39.123 12.457 32 21.333 32Z" stroke="#4285F4" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 邮件内容线条（蓝色，增强识别度） -->
+  <path d="M21.333 50.667L64 74.667L106.667 50.667" stroke="#4285F4" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 自动化流程线（绿色，代表自动执行） -->
+  <path d="M64 32V96" stroke="#34A853" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 发送成功标识（黄色，代表完成状态） -->
+  <path d="M37.333 96L64 74.667L90.667 96" stroke="#FBBC05" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
