@@ -7,7 +7,7 @@ const GITHUB_CONFIG = {
 	owner: "liuyuanquan",
 	repo: "gmail-automation-extension",
 	branch: "main",
-	templatesPath: "templates",
+	templatesPath: "public/templates",
 };
 
 /**
