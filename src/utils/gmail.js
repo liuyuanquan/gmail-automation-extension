@@ -1,7 +1,10 @@
 // ==================== Gmail 工具函数 ====================
-import { ElMessage } from "element-plus";
 import { GMAIL_SELECTORS } from "../constants";
-import { waitForElement, waitForElementRemoved } from "./dom";
+import {
+	waitForElement,
+	waitForElementRemoved,
+	waitForElementVisible,
+} from "./dom";
 import { replaceTemplatePlaceholders } from "./template";
 import { getAttachmentGitHubUrl } from "./templateLoader";
 
@@ -45,9 +48,9 @@ export function isWriteEmailOpen() {
 export function setRecipientField(value) {
 	const fields = getComposeFields();
 	if (fields.recipient) {
-		fields.recipient.focus();
 		fields.recipient.value = value ?? "";
-		fields.recipient.blur();
+		fields.subject.focus();
+		fields.subject.blur();
 	}
 }
 
@@ -58,9 +61,7 @@ export function setRecipientField(value) {
 export function setSubjectField(value) {
 	const fields = getComposeFields();
 	if (fields.subject) {
-		fields.subject.focus();
 		fields.subject.value = value ?? "";
-		fields.subject.blur();
 	}
 }
 
@@ -71,9 +72,7 @@ export function setSubjectField(value) {
 export function setBodyField(value) {
 	const fields = getComposeFields();
 	if (fields.body) {
-		fields.body.focus();
 		fields.body.innerHTML = value ?? "";
-		fields.body.blur();
 	}
 }
 
@@ -111,15 +110,22 @@ function clearAttachments() {
 /**
  * 设置附件字段
  * @param {Array<Object>|null} [attachments] - 附件数组，每个对象包含 { path, name }。如果为 null、undefined 或空数组，则清空附件
+ * @param {Function} [onUploadingChange] - 上传状态变化回调函数，参数为 (isUploading: boolean)
  */
-export async function setAttachmentsField(attachments) {
+export async function setAttachmentsField(attachments, onUploadingChange) {
 	if (!attachments || attachments.length === 0) {
 		clearAttachments();
+		if (onUploadingChange) {
+			onUploadingChange(false);
+		}
 		return;
 	}
 
 	const fields = getComposeFields();
 	if (!fields.Filedata) {
+		if (onUploadingChange) {
+			onUploadingChange(false);
+		}
 		return;
 	}
 
@@ -159,28 +165,42 @@ export async function setAttachmentsField(attachments) {
 
 		console.log(`已添加 ${files.length} 个附件`);
 
-		// 等待附件上传完成，需要等待页面上进度条消失，才能继续后面的操作，此时整个Dialog，都不允许交互
+		// 等待附件上传完成
 		const progressBar = await waitForElement(
 			GMAIL_SELECTORS.ATTACHMENTS.PROGRESS_BAR,
 			2000
 		);
 		if (progressBar) {
-			// 进度条出现，等待其消失
+			// 进度条出现，设置上传状态为 true
+			if (onUploadingChange) {
+				onUploadingChange(true);
+			}
+			// 等待其消失（最多等待10分钟，确保附件上传完成）
 			const progressBarRemoved = await waitForElementRemoved(
 				GMAIL_SELECTORS.ATTACHMENTS.PROGRESS_BAR,
-				1000 * 60 // 60秒
+				1000 * 60 * 10 // 10分钟
 			);
 			if (!progressBarRemoved) {
-				console.warn("附件上传超时，但继续执行后续操作");
+				console.warn("附件上传超时（10分钟），但继续执行后续操作");
 			} else {
 				console.log("附件上传完成");
+			}
+			// 上传完成，设置上传状态为 false
+			if (onUploadingChange) {
+				onUploadingChange(false);
 			}
 		} else {
 			// 进度条没有出现，可能文件很小或已经上传完成
 			console.log("附件已处理完成（未检测到进度条）");
+			if (onUploadingChange) {
+				onUploadingChange(false);
+			}
 		}
 	} catch (error) {
 		console.error("添加附件时出错:", error);
+		if (onUploadingChange) {
+			onUploadingChange(false);
+		}
 	}
 }
 
@@ -188,12 +208,19 @@ export async function setAttachmentsField(attachments) {
  * 设置模板字段（主题、正文、附件）
  * @param {Object|null} config - 模板配置对象，包含 subject, body, attachments。如果为 null，则清空所有模板字段
  * @param {boolean} [includeAttachments=true] - 是否设置附件，默认为 true
+ * @param {Function} [onUploadingChange] - 上传状态变化回调函数，参数为 (isUploading: boolean)
  */
-export async function setTemplateFields(config, includeAttachments = true) {
+export async function setTemplateFields(
+	config,
+	includeAttachments = true,
+	onUploadingChange
+) {
 	setSubjectField(config?.subject ?? null);
 	setBodyField(config?.body ?? null);
 	if (includeAttachments) {
-		await setAttachmentsField(config?.attachments ?? null);
+		await setAttachmentsField(config?.attachments ?? null, onUploadingChange);
+	} else if (onUploadingChange) {
+		onUploadingChange(false);
 	}
 }
 
@@ -255,7 +282,7 @@ export async function openWriteEmail() {
 	if (writeEmailDiv) {
 		writeEmailDiv.click();
 		// 等待撰写视图出现（等待收件人输入框出现）
-		await waitForElement(GMAIL_SELECTORS.COMPOSE.RECIPIENT, 5000);
+		await waitForElement(GMAIL_SELECTORS.COMPOSE.RECIPIENT, 2000);
 		// 全屏（重新获取字段，因为撰写视图已加载）
 		const composeFields = getComposeFields();
 		const fullScreenButton = composeFields.fullScreenButton;
@@ -267,6 +294,27 @@ export async function openWriteEmail() {
 				view: window,
 			});
 			fullScreenButton.dispatchEvent(mouseUpEvent);
+			// 等待 .aSs 元素的 visibility 不为 hidden（表示全屏动画完成）
+			await waitForElementVisible("div.aSs", 2000);
+			// 等待收件人输入框获得焦点
+			await new Promise((resolve) => {
+				const handler = (e) => {
+					const target = e.target;
+					// 检查是否是收件人输入框
+					if (
+						target &&
+						target.matches &&
+						target.matches(GMAIL_SELECTORS.COMPOSE.RECIPIENT)
+					) {
+						target.blur();
+						// 移除事件监听器并 resolve
+						document.body.removeEventListener("focus", handler, true);
+						resolve();
+					}
+				};
+				// 在 body 上使用事件委托监听收件人输入框的 focus 事件
+				document.body.addEventListener("focus", handler, true);
+			});
 		}
 	}
 }
@@ -274,19 +322,62 @@ export async function openWriteEmail() {
 /**
  * 发送邮件
  * @param {string} [recipient=""] - 收件人邮箱（用于日志记录和提示消息）
+ * @param {boolean} [mockSend=true] - 是否模拟发送，true 为模拟发送，false 为真正发送
+ * @returns {Promise<{success: boolean, message: string}>} 返回发送结果，包含 success 和 message（失败时 message 包含失败原因）
  */
-export async function sendEmail(recipient = "") {
-	// 查找 Gmail 发送按钮并点击
-	const fields = getComposeFields();
-	fields.sendButton?.click();
+export async function sendEmail(recipient = "", mockSend = true) {
+	try {
+		if (mockSend) {
+			// 模拟发送：不真正发送邮件，只删除草稿
+			await discardDraft();
+			const message = recipient
+				? `${recipient} 发送成功（模拟）`
+				: "邮件发送成功（模拟）";
+			return {
+				success: true,
+				message,
+			};
+		} else {
+			// 真正发送：点击发送按钮
+			const fields = getComposeFields();
+			fields.sendButton?.click();
 
-	// 等待 2 秒，确保邮件发送完成
-	await new Promise((resolve) => setTimeout(resolve, 2000));
+			// 检查是否出现错误提示元素（<div jscontroller="dGzwdb">）
+			// 2秒内出现该元素则判定为发送失败，未出现则判定为发送成功
+			const errorDiv = await waitForElement('div[jscontroller="dGzwdb"]', 2000);
+			let result;
+			if (errorDiv) {
+				// 从 class="uW2Fw-bHk" 提取错误文本
+				const errorTextEl = errorDiv.querySelector("div.uW2Fw-bHk");
+				const errorText = errorTextEl?.textContent?.trim() || "检测到错误提示";
+				const errorMessage = recipient
+					? `${recipient} 发送失败`
+					: "邮件发送失败";
+				errorDiv.remove();
+				result = {
+					success: false,
+					message: `${errorMessage}: ${errorText}`,
+				};
+			} else {
+				const message = recipient ? `${recipient} 发送成功` : "邮件发送成功";
+				result = {
+					success: true,
+					message,
+				};
+			}
 
-	// 显示成功消息
-	ElMessage({
-		message: recipient ? `${recipient} 发送成功` : "邮件发送成功",
-		type: "success",
-		duration: 2000,
-	});
+			// 无论成功还是失败，统一丢弃草稿
+			await discardDraft();
+
+			return result;
+		}
+	} catch (error) {
+		// 失败处理
+		const errorMessage = recipient ? `${recipient} 发送失败` : "邮件发送失败";
+		const reason = error?.message || "未知错误";
+		return {
+			success: false,
+			message: `${errorMessage}: ${reason}`,
+		};
+	}
 }

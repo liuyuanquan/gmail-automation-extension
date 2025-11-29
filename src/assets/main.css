@@ -1,8 +1,8 @@
 .el-dialog {
 	position: fixed;
-	right: 50px;
-	top: 50%;
-	transform: translateY(-50%);
+	left: 50%;
+	transform: translateX(-50%);
+	top: 40px;
 	margin: 0;
 }
 
