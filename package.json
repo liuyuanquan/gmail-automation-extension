@@ -1,6 +1,6 @@
 {
 	"name": "gmail-automation-extension",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Automate filling and sending emails in Gmail",
 	"type": "module",
 	"scripts": {
