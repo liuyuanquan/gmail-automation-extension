@@ -1,35 +1,32 @@
 {
 	"manifest_version": 3,
 	"name": "Gmail Automation",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Automate filling and sending emails in Gmail",
-	"permissions": ["activeTab", "storage", "downloads"],
+	"minimum_chrome_version": "88",
+	"permissions": ["downloads"],
 	"host_permissions": ["https://mail.google.com/*"],
-	"web_accessible_resources": [
-		{
-			"resources": ["plugin/*"],
-			"matches": ["https://mail.google.com/*"]
-		}
-	],
 	"background": {
 		"service_worker": "js/background.js"
 	},
 	"content_scripts": [
 		{
 			"matches": ["https://mail.google.com/*"],
-			"js": ["js/xlsx.full.min.js", "js/content.js"]
+			"js": ["js/xlsx.full.min.js", "js/content.js"],
+			"run_at": "document_idle"
 		}
 	],
 	"action": {
 		"default_icon": {
-			"16": "icons/icon16.svg",
-			"48": "icons/icon48.svg",
-			"128": "icons/icon128.svg"
-		}
+			"16": "icons/icon16.png",
+			"48": "icons/icon48.png",
+			"128": "icons/icon128.png"
+		},
+		"default_title": "Gmail Automation"
 	},
 	"icons": {
-		"16": "icons/icon16.svg",
-		"48": "icons/icon48.svg",
-		"128": "icons/icon128.svg"
+		"16": "icons/icon16.png",
+		"48": "icons/icon48.png",
+		"128": "icons/icon128.png"
 	}
 }
