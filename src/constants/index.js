@@ -6,7 +6,7 @@ export const GMAIL_SELECTORS = {
 	// 撰写视图字段
 	COMPOSE: {
 		// 收件人输入框
-		RECIPIENT: "input.agP.aFw",
+		RECIPIENT: ".fX.aiL input",
 		// 主题输入框
 		SUBJECT: "input.aoT",
 		// 正文编辑区域

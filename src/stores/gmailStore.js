@@ -246,11 +246,13 @@ export const useGmailStore = defineStore("gmail", () => {
 	// 当前发送的数据索引（从 0 开始）
 	const currentSendIndex = ref(0);
 
-	// 是否可以开始发送邮件（需要满足：模板配置存在、有收件人邮箱、当前未在发送中、未在上传附件）
+	// 是否可以开始发送邮件（需要满足：模板配置存在、有收件人邮箱、当前未在发送中、未在上传附件、未发送到最后一个）
 	const canSend = computed(() => {
 		return (
 			templateConfig.value?.subject &&
 			recipientEmails.value &&
+			recipientEmails.value.length > 0 &&
+			currentSendIndex.value < recipientEmails.value.length &&
 			!isSending.value &&
 			!isUploading.value
 		);

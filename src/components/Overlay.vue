@@ -27,7 +27,7 @@
 				zIndex: 5000,
 			}"
 		></div>
-		<el-form label-width="100px">
+		<el-form label-width="100px" :disabled="isSending">
 			<!-- 模板选择 -->
 			<el-form-item label="邮件模板:">
 				<div class="form-item-content">
