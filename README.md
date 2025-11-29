@@ -76,11 +76,27 @@ npm run build
 
 ### 4. 加载扩展
 
+## ⚠️ 重要提示
+
+**必须在项目根目录加载扩展，而不是 dist 目录！**
+
+### 正确步骤
+
 1. 打开 Chrome 浏览器
 2. 访问 `chrome://extensions/`
-3. 开启"开发者模式"
-4. 点击"加载已解压的扩展程序"
-5. 选择 `dist/` 目录（构建后的目录）
+3. 开启右上角的"开发者模式"（Developer mode）
+4. 点击"加载已解压的扩展程序"（Load unpacked）
+5. **选择项目根目录**：例如 `d:\code\gmail-automation-extension`
+   - ✅ 正确：选择包含 `manifest.json` 的目录
+   - ❌ 错误：不要选择 `dist` 目录
+
+### 验证
+
+加载成功后，你应该看到：
+
+- ✅ 扩展名称：Gmail Automation
+- ✅ 版本：1.0.2
+- ✅ 没有错误提示
 
 ## 使用方法
 
@@ -185,9 +201,10 @@ npm run build
 1. **扩展无法加载**：
 
    - 确保已开启开发者模式
-   - 确保选择了 `dist/` 目录（不是项目根目录）
+   - 确保选择了项目根目录（包含 `manifest.json` 的目录）
+   - 不要选择 `dist` 目录
    - 确保已运行 `npm run build` 构建项目
-   - 确保 `dist/` 目录中包含 `manifest.json` 文件
+   - 确保项目根目录中包含 `manifest.json` 文件
 
 2. **无法填充邮件字段**：
 
