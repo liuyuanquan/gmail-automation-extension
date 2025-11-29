@@ -117,6 +117,244 @@ function generateFileNameWithTimestamp(originalFileName) {
 }
 
 /**
+ * 应用美观的 Excel 样式
+ * @param {Object} worksheet - 工作表对象
+ * @param {Array<string>} headers - 表头数组
+ * @param {number} dataRowCount - 数据行数
+ * @param {Array<Object>} dataArray - 数据数组（用于添加超链接和样式）
+ */
+function applyExcelStyles(worksheet, headers, dataRowCount, dataArray) {
+	// 检查是否支持样式（xlsx-js-style）
+	const hasStyleSupport =
+		typeof XLSX !== "undefined" &&
+		XLSX.utils &&
+		typeof XLSX.utils.sheet_set_range_style === "function";
+
+	// 设置列宽
+	setColumnWidths(worksheet, headers);
+
+	// 设置行高
+	if (!worksheet["!rows"]) {
+		worksheet["!rows"] = [];
+	}
+	worksheet["!rows"][0] = { hpt: 28 }; // 表头行高 28
+	for (let i = 1; i <= dataRowCount; i++) {
+		worksheet["!rows"][i] = { hpt: 22 }; // 数据行高 22
+	}
+
+	// 如果支持样式，应用完整样式
+	if (hasStyleSupport) {
+		applyFullStyles(worksheet, headers, dataRowCount, dataArray);
+	} else {
+		// 否则只应用基础格式
+		applyBasicStyles(worksheet, headers, dataRowCount, dataArray);
+	}
+}
+
+/**
+ * 应用完整的样式（需要 xlsx-js-style 支持）
+ */
+function applyFullStyles(worksheet, headers, dataRowCount, dataArray) {
+	// 表头样式：深蓝灰色背景、白色加粗文字、居中、边框
+	const headerStyle = {
+		fill: {
+			fgColor: { rgb: "2F5597" }, // 深蓝灰色
+		},
+		font: {
+			bold: true,
+			color: { rgb: "FFFFFF" },
+			sz: 11,
+			name: "Microsoft YaHei",
+		},
+		alignment: {
+			horizontal: "center",
+			vertical: "center",
+			wrapText: true,
+		},
+		border: {
+			top: { style: "thin", color: { rgb: "1F3A5F" } },
+			bottom: { style: "thin", color: { rgb: "1F3A5F" } },
+			left: { style: "thin", color: { rgb: "1F3A5F" } },
+			right: { style: "thin", color: { rgb: "1F3A5F" } },
+		},
+	};
+
+	// 应用表头样式
+	const headerRange = XLSX.utils.encode_range({
+		s: { c: 0, r: 0 },
+		e: { c: headers.length - 1, r: 0 },
+	});
+	try {
+		XLSX.utils.sheet_set_range_style(worksheet, headerRange, headerStyle);
+	} catch (e) {
+		console.warn("应用表头样式失败:", e);
+	}
+
+	// 数据行样式（所有内容垂直居中）
+	const defaultDataStyle = {
+		alignment: {
+			horizontal: "center",
+			vertical: "center", // 垂直居中
+			wrapText: true,
+		},
+		border: {
+			top: { style: "thin", color: { rgb: "E0E0E0" } },
+			bottom: { style: "thin", color: { rgb: "E0E0E0" } },
+			left: { style: "thin", color: { rgb: "E0E0E0" } },
+			right: { style: "thin", color: { rgb: "E0E0E0" } },
+		},
+		font: {
+			sz: 10,
+			name: "Microsoft YaHei",
+		},
+	};
+
+	// 状态列样式
+	const statusStyles = {
+		已发送: {
+			fill: { fgColor: { rgb: "E8F5E9" } }, // 浅绿色背景
+			font: { color: { rgb: "2E7D32" }, bold: true }, // 深绿色加粗文字
+		},
+		发送失败: {
+			fill: { fgColor: { rgb: "FFEBEE" } }, // 浅红色背景
+			font: { color: { rgb: "C62828" }, bold: true }, // 深红色加粗文字
+		},
+	};
+
+	// 应用数据行样式
+	for (let row = 1; row <= dataRowCount; row++) {
+		for (let col = 0; col < headers.length; col++) {
+			const cellAddress = XLSX.utils.encode_cell({ c: col, r: row });
+			const cell = worksheet[cellAddress];
+			if (!cell) continue;
+
+			const header = headers[col];
+			let cellStyle = { ...defaultDataStyle };
+
+			// 状态列特殊样式
+			if (header === "status" && cell.v && statusStyles[cell.v]) {
+				cellStyle = { ...cellStyle, ...statusStyles[cell.v] };
+			}
+
+			// Email 列：蓝色超链接（确保垂直居中）
+			if (
+				header?.toLowerCase() === "email" &&
+				cell.v &&
+				typeof cell.v === "string" &&
+				cell.v.includes("@")
+			) {
+				// 添加超链接
+				cell.l = { Target: `mailto:${cell.v}` };
+				// 设置超链接样式
+				cellStyle.font = {
+					...cellStyle.font,
+					color: { rgb: "1976D2" }, // 蓝色
+					underline: true,
+				};
+				// 确保垂直居中
+				cellStyle.alignment.vertical = "center";
+			}
+
+			// 时间列：灰色文字、右对齐（保持垂直居中）
+			if (header === "time" && cell.v) {
+				cellStyle.alignment.horizontal = "right";
+				cellStyle.alignment.vertical = "center"; // 确保垂直居中
+				cellStyle.font.color = { rgb: "757575" }; // 灰色
+			}
+
+			// 失败原因列：红色文字（保持垂直居中）
+			if (header === "reason" && cell.v) {
+				cellStyle.font.color = { rgb: "C62828" }; // 深红色
+				cellStyle.alignment.horizontal = "left";
+				cellStyle.alignment.vertical = "center"; // 确保垂直居中
+			}
+
+			// 名称列：左对齐（保持垂直居中）
+			if (header?.toLowerCase() === "name") {
+				cellStyle.alignment.horizontal = "left";
+				cellStyle.alignment.vertical = "center"; // 确保垂直居中
+			}
+
+			// Email 列：确保垂直居中
+			if (header?.toLowerCase() === "email") {
+				cellStyle.alignment.vertical = "center"; // 确保垂直居中
+			}
+
+			try {
+				XLSX.utils.sheet_set_cell_style(worksheet, cellAddress, cellStyle);
+			} catch (e) {
+				// 忽略样式设置错误
+			}
+		}
+	}
+}
+
+/**
+ * 应用基础样式（标准 XLSX 库）
+ */
+function applyBasicStyles(worksheet, headers, dataRowCount, dataArray) {
+	// 为 Email 列添加超链接
+	const emailColIndex = headers.findIndex((h) => h?.toLowerCase() === "email");
+	if (emailColIndex >= 0) {
+		for (let row = 0; row < dataRowCount; row++) {
+			const cellAddress = XLSX.utils.encode_cell({
+				c: emailColIndex,
+				r: row + 1,
+			});
+			const cell = worksheet[cellAddress];
+			if (
+				cell &&
+				cell.v &&
+				typeof cell.v === "string" &&
+				cell.v.includes("@")
+			) {
+				// 添加超链接
+				cell.l = { Target: `mailto:${cell.v}` };
+				// 设置单元格类型，确保超链接可点击
+				cell.t = "s";
+			}
+		}
+	}
+
+	// 为所有单元格设置垂直居中（通过行高和单元格格式）
+	// 注意：标准 XLSX 库不支持直接设置垂直对齐，但可以通过行高来改善视觉效果
+}
+
+/**
+ * 设置列宽（优化后的宽度设置）
+ * @param {Object} worksheet - 工作表对象
+ * @param {Array<string>} headers - 表头数组
+ */
+function setColumnWidths(worksheet, headers) {
+	if (!worksheet["!cols"]) {
+		worksheet["!cols"] = [];
+	}
+
+	headers.forEach((header, index) => {
+		let width = 12; // 默认宽度
+
+		// 根据列类型设置不同宽度（更合理的宽度）
+		const headerLower = header?.toLowerCase();
+		if (headerLower === "email") {
+			width = 32; // 邮箱列
+		} else if (headerLower === "status" || header === "status") {
+			width = 14; // 状态列
+		} else if (headerLower === "time" || header === "time") {
+			width = 20; // 时间列
+		} else if (headerLower === "reason" || header === "reason") {
+			width = 45; // 失败原因列
+		} else if (headerLower === "name" || header === "name") {
+			width = 20; // 名称列
+		} else {
+			// 根据表头文字长度设置宽度，最小12，最大30
+			width = Math.min(30, Math.max(12, (header?.length || 0) * 1.3 + 4));
+		}
+
+		worksheet["!cols"][index] = { wch: width };
+	});
+}
+
+/**
  * 将对象数组写回 Excel 文件（使用 Chrome Downloads API）
  * @param {Array<Object>} dataArray - 对象数组
  * @param {Array<string>} headers - 表头数组
@@ -135,6 +373,9 @@ export async function writeExcelFile(dataArray, headers, fileName) {
 
 	// 创建工作表
 	const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+
+	// 应用格式（列宽、行高、超链接等）
+	applyExcelStyles(worksheet, headers, dataArray.length, dataArray);
 
 	// 创建工作簿
 	const workbook = XLSX.utils.book_new();
