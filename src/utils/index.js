@@ -41,3 +41,13 @@ export { getFailureDelay } from "./delay";
 
 // 模板加载器
 export { loadTemplates, getGitHubConfig } from "./templateLoader";
+
+// 消息提示工具函数
+export {
+	showSuccess,
+	showError,
+	showWarning,
+	showInfo,
+	updateTopMessage,
+	closeTopMessage,
+} from "./message";

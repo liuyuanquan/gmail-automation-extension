@@ -22,8 +22,7 @@ export function replaceTemplatePlaceholders(template, dataRow) {
 			// 找到对应的值，进行替换
 			return String(dataRow[key]);
 		}
-		// 如果找不到对应的列，保留原始占位符并警告
-		console.warn(`未找到占位符 {{ ${placeholder} }} 对应的 Excel 列`);
+		// 如果找不到对应的列，保留原始占位符（原封不动）
 		return match;
 	});
 }

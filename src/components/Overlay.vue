@@ -5,7 +5,7 @@
 		width="480px"
 		:close-on-click-modal="false"
 		:close-on-press-escape="true"
-		@close="isDialogVisible = false"
+		@close="handleDialogClose"
 		class="overlay-dialog"
 	>
 		<!-- 附件上传遮罩层 -->
@@ -128,6 +128,17 @@ const { handleTemplateChange, handleExcelChange, startBatchSend, stopSending } =
 
 // 将 TEMPLATE_OPTIONS 转换为计算属性以便响应式更新
 const templateOptions = computed(() => TEMPLATE_OPTIONS.value);
+
+// 处理 dialog 关闭事件
+function handleDialogClose() {
+	// 如果正在发送，执行停止发送逻辑（会关闭 dialog）
+	if (isSending.value) {
+		stopSending();
+	} else {
+		// 否则直接关闭 dialog
+		isDialogVisible.value = false;
+	}
+}
 </script>
 
 <style scoped>
