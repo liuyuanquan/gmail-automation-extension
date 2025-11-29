@@ -16,7 +16,6 @@ export default defineConfig({
 					"@/stores/gmailStore": ["useGmailStore"],
 					"@element-plus/icons-vue": [
 						"Delete",
-						"Loading",
 						// 可以在这里添加更多需要自动导入的图标
 					],
 				},
@@ -32,9 +31,6 @@ export default defineConfig({
 			],
 		}),
 	],
-	css: {
-		postcss: "./postcss.config.js",
-	},
 	build: {
 		outDir: "dist",
 		emptyOutDir: true,
