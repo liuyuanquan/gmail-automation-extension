@@ -7,7 +7,7 @@
 	"host_permissions": ["https://mail.google.com/*"],
 	"web_accessible_resources": [
 		{
-			"resources": ["templates/*", "plugin/*"],
+			"resources": ["plugin/*"],
 			"matches": ["https://mail.google.com/*"]
 		}
 	],
