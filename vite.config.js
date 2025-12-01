@@ -86,16 +86,14 @@ export default defineConfig({
 		outDir: "dist",
 		emptyOutDir: true,
 		rollupOptions: {
-			input: {
-				content: resolve(__dirname, "src/app.js"),
-				demo: resolve(__dirname, "demo/demo.js"),
-			},
+			input: resolve(__dirname, "src/app.js"), // 只构建 content，demo 单独处理
 			output: {
 				format: "iife",
 				name: "GmailAutomation",
-				entryFileNames: "js/[name].js",
-				chunkFileNames: "js/[name].js",
+				entryFileNames: "js/content.js",
+				chunkFileNames: "js/content-[hash].js",
 				assetFileNames: "[name].[ext]",
+				inlineDynamicImports: true, // 内联所有动态导入，生成单个文件
 			},
 		},
 		minify: "esbuild", // 使用 esbuild 压缩（Vite 默认，更快）
