@@ -73,13 +73,36 @@ gmail-automation-extension/
 pnpm install
 ```
 
-### 2. 开发模式（监听文件变化）
+### 2. 配置环境变量
+
+复制 `.env.example` 文件为 `.env` 并填入你的 GitHub Personal Access Token：
+
+```bash
+cp .env.example .env
+```
+
+编辑 `.env` 文件，将 `your_github_token_here` 替换为你的 GitHub token：
+
+```
+GITHUB_TOKEN=your_actual_github_token_here
+```
+
+**获取 GitHub Token：**
+1. 访问 https://github.com/settings/tokens
+2. 点击 "Generate new token" -> "Generate new token (classic)"
+3. 设置 token 名称和过期时间
+4. 勾选 `repo` 权限（Full control of private repositories）
+5. 生成并复制 token
+
+**注意：** `.env` 文件已添加到 `.gitignore`，不会被提交到仓库。
+
+### 3. 开发模式（监听文件变化）
 
 ```bash
 npm run dev
 ```
 
-### 3. 构建生产版本
+### 4. 构建生产版本
 
 ```bash
 npm run build
@@ -87,7 +110,7 @@ npm run build
 
 构建完成后，文件会输出到 `dist/` 目录。
 
-### 4. 加载扩展
+### 5. 加载扩展
 
 ## ⚠️ 重要提示
 

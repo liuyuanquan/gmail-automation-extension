@@ -121,4 +121,6 @@ export default defineConfig({
 	optimizeDeps: {
 		include: ["vue", "pinia", "element-plus"],
 	},
+	// 环境变量配置
+	envPrefix: ["VITE_", "GITHUB_"], // 支持 VITE_ 和 GITHUB_ 前缀的环境变量
 });
