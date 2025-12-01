@@ -40,6 +40,15 @@
 				"subject": "asdasdas",
 				"attachments": []
 			}
+		},
+		{
+			"label": "asdasdas",
+			"value": "template1764583585881301",
+			"htmlFile": "template1764583585881301.html",
+			"extra": {
+				"subject": "asdasdasdsa",
+				"attachments": []
+			}
 		}
 	]
 }
