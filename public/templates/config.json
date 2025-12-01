@@ -49,6 +49,20 @@
 					}
 				]
 			}
+		},
+		{
+			"label": "模板19",
+			"value": "template1764593188869637",
+			"htmlFile": "template1764593188869637.html",
+			"extra": {
+				"subject": "测试模板19",
+				"attachments": [
+					{
+						"path": "attachments/20250327-194257.gif",
+						"name": "20250327-194257.gif"
+					}
+				]
+			}
 		}
 	]
 }
