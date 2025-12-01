@@ -31,7 +31,13 @@ export {
 } from "./excel";
 
 // 模板工具函数
-export { replaceTemplatePlaceholders } from "./template";
+export {
+	replaceTemplatePlaceholders,
+	loadTemplates,
+	saveTemplateConfigToGitHub,
+	saveTemplateHtmlToGitHub,
+	saveTemplatesToGitHub,
+} from "./template";
 
 // 时间工具函数
 export { formatCurrentTime } from "./time";
@@ -39,8 +45,8 @@ export { formatCurrentTime } from "./time";
 // 延迟工具函数
 export { getFailureDelay } from "./delay";
 
-// 模板加载器
-export { loadTemplates, getGitHubConfig } from "./templateLoader";
+// GitHub API
+export { getGitHubFileContent, getGitHubRawUrl } from "./githubApi";
 
 // 消息提示工具函数
 export {

@@ -6,7 +6,7 @@ import {
 	waitForElementVisible,
 } from "./dom";
 import { replaceTemplatePlaceholders } from "./template";
-import { getAttachmentGitHubUrl } from "./templateLoader";
+import { getGitHubRawUrl } from "./githubApi";
 
 /**
  * 获取 Gmail 撰写视图的字段元素
@@ -137,7 +137,7 @@ export async function setAttachmentsField(attachments, onUploadingChange) {
 		const files = await Promise.all(
 			attachments.map(async (attachment) => {
 				// 从 GitHub 加载附件（路径相对于 templates 目录）
-				const fileUrl = getAttachmentGitHubUrl(attachment.path);
+				const fileUrl = getGitHubRawUrl(attachment.path);
 
 				// 获取文件内容
 				const response = await fetch(fileUrl);

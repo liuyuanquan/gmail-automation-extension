@@ -1,12 +1,13 @@
 {
 	"name": "gmail-automation-extension",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "Automate filling and sending emails in Gmail",
 	"type": "module",
 	"scripts": {
 		"dev": "vite build --watch",
 		"build": "vite build",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"demo": "vite --config vite.config.js"
 	},
 	"dependencies": {
 		"@element-plus/icons-vue": "^2.3.2",

@@ -88,6 +88,7 @@ export default defineConfig({
 		rollupOptions: {
 			input: {
 				content: resolve(__dirname, "src/app.js"),
+				demo: resolve(__dirname, "demo/demo.js"),
 			},
 			output: {
 				format: "iife",
@@ -107,6 +108,15 @@ export default defineConfig({
 	},
 	// 禁用默认的 public 目录复制行为，使用自定义插件处理
 	publicDir: false,
+	// 开发服务器配置
+	server: {
+		port: 3000,
+		open: "/demo/index.html",
+		fs: {
+			// 允许访问项目根目录之外的文件（如果需要）
+			allow: [".."],
+		},
+	},
 	// 优化依赖预构建
 	optimizeDeps: {
 		include: ["vue", "pinia", "element-plus"],

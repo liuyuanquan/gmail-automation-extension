@@ -10,6 +10,8 @@
 - 🚀 批量发送邮件，自动处理多封邮件
 - 🎨 现代化的 UI 界面（基于 Vue 3 + Element Plus）
 - ⚡ 通过浮动按钮快速访问功能
+- 🔧 模板管理功能，支持在扩展内直接管理模板
+- 📎 支持附件上传和管理，附件保存到 GitHub
 
 ## 📦 项目结构
 
@@ -18,6 +20,7 @@ gmail-automation-extension/
 ├── src/
 │   ├── components/
 │   │   ├── Overlay.vue          # Dialog 覆盖层组件
+│   │   ├── TemplateManager.vue  # 模板管理组件
 │   │   └── FloatingButton.vue   # 浮动按钮组件
 │   ├── constants/
 │   │   └── index.js             # 常量定义
@@ -31,7 +34,7 @@ gmail-automation-extension/
 │   │   ├── index.js              # 工具函数入口
 │   │   ├── message.js            # 消息处理
 │   │   ├── template.js           # 模板处理
-│   │   ├── templateLoader.js     # 模板加载器
+│   │   ├── githubApi.js          # GitHub API 工具
 │   │   └── time.js               # 时间相关工具
 │   ├── assets/
 │   │   ├── main.css              # 全局样式
@@ -117,6 +120,10 @@ npm run build
    - 导入 Excel 文件（包含收件人邮箱）
    - 点击"开始发送"按钮批量发送邮件
 4. 可以随时点击"停止发送"按钮中断发送过程
+5. 点击"模板管理"按钮可以管理邮件模板：
+   - 新增、编辑、删除模板
+   - 上传和管理附件
+   - 所有更改自动保存到 GitHub
 
 ## 🛠️ 技术栈
 
@@ -137,7 +144,8 @@ npm run build
 ### 工具函数
 
 项目中的工具函数都位于 `utils/` 目录下，包含多个专用模块：
-- `templateLoader.js` - 负责加载和管理邮件模板
+- `template.js` - 负责加载和管理邮件模板，处理模板占位符替换
+- `githubApi.js` - GitHub API 工具，处理模板和附件的上传下载
 - `excel.js` - 处理Excel文件导入和数据提取
 - `gmail.js` - Gmail页面操作相关功能
 - 以及其他辅助工具模块
@@ -145,7 +153,8 @@ npm run build
 ### 组件
 
 - `App.vue` - 根组件，包含 Overlay 和 FloatingButton
-- `Overlay.vue` - Dialog 组件，包含表单和操作按钮
+- `Overlay.vue` - Dialog 组件，包含表单和操作按钮，集成模板管理入口
+- `TemplateManager.vue` - 模板管理组件，支持模板的 CRUD 操作和附件管理
 - `FloatingButton.vue` - 浮动按钮组件，支持拖拽和点击
 
 ## 🔧 配置说明

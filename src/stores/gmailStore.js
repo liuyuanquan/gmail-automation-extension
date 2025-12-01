@@ -14,12 +14,12 @@ import {
 	addMissingField,
 	findEmailKey,
 	replaceTemplatePlaceholders,
+	loadTemplates,
 	updateTopMessage,
 	closeTopMessage,
 	showInfo,
 } from "../utils";
 import { TEMPLATE_OPTIONS } from "../constants";
-import { loadTemplates } from "../utils/templateLoader";
 
 export const useGmailStore = defineStore("gmail", () => {
 	// ==================== Dialog ====================
@@ -98,6 +98,30 @@ export const useGmailStore = defineStore("gmail", () => {
 		await setTemplateFields(templateConfig.value, false, (uploading) => {
 			isUploading.value = uploading;
 		});
+	}
+
+	/**
+	 * 重新加载模板（从 GitHub）
+	 */
+	async function reloadTemplates() {
+		try {
+			const templates = await loadTemplates();
+			TEMPLATE_OPTIONS.value = templates;
+			// 如果当前选择的模板不存在，则选择第一个
+			if (templates.length > 0) {
+				const currentTemplateExists = templates.some(
+					(t) => t.value === template.value
+				);
+				if (!currentTemplateExists) {
+					template.value = templates[0].value;
+				}
+			} else {
+				template.value = null;
+			}
+		} catch (error) {
+			console.error("重新加载模板失败:", error);
+			throw error;
+		}
 	}
 
 	// ==================== Excel ====================
@@ -488,5 +512,6 @@ export const useGmailStore = defineStore("gmail", () => {
 		handleExcelChange,
 		startBatchSend,
 		stopSending,
+		reloadTemplates,
 	};
 });
