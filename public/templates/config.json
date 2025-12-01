@@ -38,7 +38,12 @@
 			"htmlFile": "template1764592625488760.html",
 			"extra": {
 				"subject": "三省测试模板标题",
-				"attachments": []
+				"attachments": [
+					{
+						"path": "attachments/d968412e-29ed-4685-b6b4-1e1d35aae170 (3).mp4",
+						"name": "d968412e-29ed-4685-b6b4-1e1d35aae170 (3).mp4"
+					}
+				]
 			}
 		}
 	]
