@@ -67,6 +67,15 @@
 				"subject": "2",
 				"attachments": []
 			}
+		},
+		{
+			"label": "asdsada",
+			"value": "template1764583645884405",
+			"htmlFile": "template1764583645884405.html",
+			"extra": {
+				"subject": "asdasdsa",
+				"attachments": []
+			}
 		}
 	]
 }
