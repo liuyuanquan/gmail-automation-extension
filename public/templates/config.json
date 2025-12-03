@@ -53,6 +53,24 @@
 					}
 				]
 			}
+		},
+		{
+			"label": "徐秘测试",
+			"value": "template1764775552612955",
+			"htmlFile": "template1764775552612955.html",
+			"extra": {
+				"subject": "徐秘测试模板",
+				"attachments": [
+					{
+						"path": "attachments/eula.2052.txt",
+						"name": "eula.2052.txt"
+					},
+					{
+						"path": "attachments/T1.png",
+						"name": "T1.png"
+					}
+				]
+			}
 		}
 	]
 }
