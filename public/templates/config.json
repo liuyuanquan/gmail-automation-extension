@@ -89,6 +89,15 @@
 				"subject": "【专属邀请】1秒速达 3000K!焦耳加热设备免费体验",
 				"attachments": []
 			}
+		},
+		{
+			"label": "经销商",
+			"value": "template1787763689954869",
+			"htmlFile": "template1787763689954869.html",
+			"extra": {
+				"subject": "1",
+				"attachments": []
+			}
 		}
 	]
 }
